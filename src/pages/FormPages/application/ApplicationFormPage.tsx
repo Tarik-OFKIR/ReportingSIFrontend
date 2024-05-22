@@ -7,6 +7,7 @@ import {Application} from "../../../Modules/Application.tsx";
 import SearchAutoCompleted from "../../../components/searchField/SearchAutoCompleted.tsx";
 import {TextField} from "@mui/material";
 import {token} from "../../../utils/Constant.ts";
+import {IGData} from "../../../Modules/IGData.tsx";
 
 function ApplicationFormPage() {
     const [items, setItems] = useState<Application[]>([]);
@@ -27,11 +28,15 @@ function ApplicationFormPage() {
         };
         fetchData();
     }, []);
-    const handleChanges = async (value: Application) => {
+    const handleChanges = async (application: IGData) => {
+        const applicationTarget = items.find((item) => item.name === application.name);
         setOpen(true);
-        setApplicationName(value.name);
-        setApplicationCode(value.code);
-        setId(value.id);
+        if (applicationTarget){
+            setApplicationName(applicationTarget.name);
+            setApplicationCode(applicationTarget.code);
+            setId(applicationTarget.id);
+        }
+
     }
     const onSubmitCreatItem = async () => {
         try {

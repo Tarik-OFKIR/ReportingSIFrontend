@@ -9,6 +9,7 @@ import {SC} from "../StyleFormPages/FormPagesStyles.tsx";
 import {extinction} from "../agency/enums/Enums.tsx";
 import SearchAutoCompleted from "../../../components/searchField/SearchAutoCompleted.tsx";
 import {token} from "../../../utils/Constant.ts";
+import {IGData} from "../../../Modules/IGData.tsx";
 
 function StateFormPage() {
     const [items, setItems] = useState<State[]>([]);
@@ -22,6 +23,7 @@ function StateFormPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                //TODO: change the url to be dynamic
                 const stateResponse = await getData(token, "/application/474/stats");
                 setItems(stateResponse);
             } catch (error) {
@@ -61,66 +63,70 @@ function StateFormPage() {
             console.error('error fetching state data', error);
         }
     }
-        const onSubmitDeleteItem = async () => {
+    const onSubmitDeleteItem = async () => {
 
-        }
-        const onSubmitCancelAction = async () => {
+    }
+    const onSubmitCancelAction = async () => {
 
-        }
-        const handleChanges = async (value: State) => {
-            setOpen(true);
-            setStateId(value.id);
-            setStateName(value.name);
-            setStateDescription(value.description);
-            setStateExtension(value.extension);
-            setStateApplicationCode(value.applicationId);
-        }
-
-        const handleInputName = async (event: ChangeEvent<HTMLInputElement>) => {
-            setStateName(event.target.value);
-        }
-        const handleInputDescription = async (event: ChangeEvent<HTMLInputElement>) => {
-            setStateDescription(event.target.value);
-        }
-        const handleInputExtension = async (event: ChangeEvent<HTMLInputElement>) => {
-            setStateExtension(event.target.value);
-        }
-        const handleInputApplicationCode = async (event: ChangeEvent<HTMLInputElement>) => {
-            setStateApplicationCode(parseInt(event.target.value));
+    }
+    const handleChanges = async (state: IGData) => {
+        const stateTarget = items.find((item) => item.name === state.name);
+        setOpen(true);
+        if (stateTarget) {
+            setStateId(stateTarget.id);
+            setStateName(stateTarget.name);
+            setStateDescription(stateTarget.description);
+            setStateExtension(stateTarget.extension);
+            setStateApplicationCode(stateTarget.applicationId);
         }
 
-        return (
-
-            <>
-                <MainNavBar/>
-                <SC.DivStyle>
-                    <div style={{flexDirection: 'row'}}>
-                        <SearchAutoCompleted items={items} arrName={"state"} handleSelection={handleChanges}/>
-                        <FormField labelName={"Nome"} massage={"Entrer le nome d'etat"} handleInput={handleInputName}
-                                   required={true}/>
-                        <FormField labelName={"description"} massage={"description d'etat"}
-                                   handleInput={handleInputDescription} required={true}/>
-                        <FormFieldAutoCompleted items={extinction} labelName={"extension"}
-                                                massage={"Entrer extension d'etat"} handleInput={handleInputExtension}
-                                                required={true}/>
-                        <FormField labelName={"Application code"} massage={"Entrer le code de l'application"}
-                                   handleInput={handleInputApplicationCode} required={true}/>
-                    </div>
-                    <div style={{flexDirection: "column", display: "flex", gap: "30px"}}>
-                        {!open && <ButtonUI bgColor={"orange"} textColor={"black"} name={"Ajouter"}
-                                            onClick={onSubmitCreatItem}/>}
-                        <ButtonUI bgColor={"orange"} textColor={"black"} name={"Modifier"}
-                                  onClick={onSubmitUpdateItem}/>
-                        <ButtonUI bgColor={"orange"} textColor={"black"} name={"Supprimer"}
-                                  onClick={onSubmitDeleteItem}/>
-                        {open && <ButtonUI bgColor={"#D9D9D9"} textColor={"black"} name={"Annuler"}
-                                           onClick={onSubmitCancelAction}/>}
-                    </div>
-                </SC.DivStyle>
-            </>
-
-
-        );
     }
 
-    export default StateFormPage;
+    const handleInputName = async (event: ChangeEvent<HTMLInputElement>) => {
+        setStateName(event.target.value);
+    }
+    const handleInputDescription = async (event: ChangeEvent<HTMLInputElement>) => {
+        setStateDescription(event.target.value);
+    }
+    const handleInputExtension = async (event: ChangeEvent<HTMLInputElement>) => {
+        setStateExtension(event.target.value);
+    }
+    const handleInputApplicationCode = async (event: ChangeEvent<HTMLInputElement>) => {
+        setStateApplicationCode(parseInt(event.target.value));
+    }
+
+    return (
+
+        <>
+            <MainNavBar/>
+            <SC.DivStyle>
+                <div style={{flexDirection: 'row'}}>
+                    <SearchAutoCompleted items={items} arrName={"state"} handleSelection={handleChanges}/>
+                    <FormField labelName={"Nome"} massage={"Entrer le nome d'etat"} handleInput={handleInputName}
+                               required={true}/>
+                    <FormField labelName={"description"} massage={"description d'etat"}
+                               handleInput={handleInputDescription} required={true}/>
+                    <FormFieldAutoCompleted items={extinction} labelName={"extension"}
+                                            massage={"Entrer extension d'etat"} handleInput={handleInputExtension}
+                                            required={true}/>
+                    <FormField labelName={"Application code"} massage={"Entrer le code de l'application"}
+                               handleInput={handleInputApplicationCode} required={true}/>
+                </div>
+                <div style={{flexDirection: "column", display: "flex", gap: "30px"}}>
+                    {!open && <ButtonUI bgColor={"orange"} textColor={"black"} name={"Ajouter"}
+                                        onClick={onSubmitCreatItem}/>}
+                    <ButtonUI bgColor={"orange"} textColor={"black"} name={"Modifier"}
+                              onClick={onSubmitUpdateItem}/>
+                    <ButtonUI bgColor={"orange"} textColor={"black"} name={"Supprimer"}
+                              onClick={onSubmitDeleteItem}/>
+                    {open && <ButtonUI bgColor={"#D9D9D9"} textColor={"black"} name={"Annuler"}
+                                       onClick={onSubmitCancelAction}/>}
+                </div>
+            </SC.DivStyle>
+        </>
+
+
+    );
+}
+
+export default StateFormPage;

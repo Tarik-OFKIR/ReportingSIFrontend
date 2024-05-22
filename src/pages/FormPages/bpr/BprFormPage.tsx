@@ -69,11 +69,16 @@ function BprFormPage() {
         }
     }
     
-    const handleChanges = async (value: IGData) => {
+    const handleChanges = async (bpr: IGData) => {
+        const bprTarget = items.find((bprItem) => bprItem.code === bpr.id);
         setOpen(true);
-        setBprName(value.name);
-        // setBprCode(value.code);
-        // setBprAddress(value.address);
+        if (bprTarget){
+            setBprName(bprTarget.name);
+            setBprCode(bprTarget.code);
+            setBprAddress(bprTarget.address);
+        }
+
+
     }
     const onSubmitCancelAction = async () => {
         setOpen(false);

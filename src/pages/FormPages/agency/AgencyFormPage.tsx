@@ -37,13 +37,13 @@ function AgencyFormPage() {
             }
         };
         fetchData();
-    }, [token]);
+    }, []);
 
     const handleBarSection = async (bpr: IGData) => {
-
-console.log(bpr.code);
+        const bprTarget = bprItems.find((bprItem) => bprItem.code === bpr.id);
+        if (bprTarget)
             try {
-                const agencyResponse = await getData(token, `/bpr/${bpr.code}/agencies`);
+                const agencyResponse = await getData(token, `/bpr/${bprTarget.code}/agencies`);
                 setItems(agencyResponse);
             } catch (error) {
                 console.error('Error fetching agency data', error);
@@ -85,6 +85,7 @@ console.log(bpr.code);
             console.error('error fetching agency data', error);
         }
     }
+
     const onSubmitDeleteItem = async () => {
        try{
            
@@ -94,6 +95,7 @@ console.log(bpr.code);
            console.error('error fetching agency data', error);
        }
     }
+
     const onSubmitCancelAction = async () => {
         setOpen(false);
         setAgencyName("");
@@ -105,17 +107,19 @@ console.log(bpr.code);
      
     }
 
-    const handleChanges = async (value: Agency) => {
-        setOpen(true);
-        setAgencyName(value.name);
-        setAgencyCode(value.id);
-        setAgencyAddress(value.address);
-        setAgencyType(value.type);
-        setAgencyCodeSuccursale(value.succursaleId.toString());
-        setAgencyCodeBpr(value.bprId.toString());
+    const handleChanges = async (agency: IGData) => {
+        const agencyTarget = items.find((agencyItem) => agencyItem.id=== agency.id);
+        if (agencyTarget){
+            setOpen(true);
+            setAgencyName(agencyTarget.name);
+            setAgencyCode(agencyTarget.id);
+            setAgencyAddress(agencyTarget.address);
+            setAgencyType(agencyTarget.type);
+            setAgencyCodeSuccursale(agencyTarget.succursaleId.toString());
+            setAgencyCodeBpr(agencyTarget.bprId.toString());
+        }
+
     }
-    
-    
 
     const handleInputName = async (event: ChangeEvent<HTMLInputElement>) => {
         setAgencyName(event.target.value);

@@ -7,6 +7,7 @@ import {Succursale} from "../../../Modules/Succursale.tsx";
 import {SC} from "../StyleFormPages/FormPagesStyles.tsx";
 import SearchAutoCompleted from "../../../components/searchField/SearchAutoCompleted.tsx";
 import {token} from "../../../utils/Constant.ts";
+import {IGData} from "../../../Modules/IGData.tsx";
 
 function SuccursaleFormPage() {
     const [items, setItems] = useState<Succursale[]>([]);
@@ -19,7 +20,7 @@ function SuccursaleFormPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const succursaleResponse = await getData(token, "/succursales");
+                const succursaleResponse = await getData(token, "/bpr/17/succursales");
                 setItems(succursaleResponse);
             } catch (error) {
                 console.error('Error fetching succursale data', error);
@@ -71,12 +72,16 @@ function SuccursaleFormPage() {
     const onSubmitCancelAction = async () => {
         setOpen(false);
     }
-    const handleChanges = async (value: Succursale) => {
-        setOpen(true);
-        setSuccursaleId(value.id);
-        setSuccursaleName(value.name);
-        setSuccursaleCode(value.code);
-        setSuccursaleCodeBpr(value.bprId);
+    const handleChanges = async (succursale: IGData) => {
+        const succursaleTarget = items.find((item) => item.name === succursale.name);
+        if (succursaleTarget){
+            setOpen(true);
+            setSuccursaleId(succursaleTarget.id);
+            setSuccursaleName(succursaleTarget.name);
+            setSuccursaleCode(succursaleTarget.code);
+            setSuccursaleCodeBpr(succursaleTarget.bprId);
+        }
+
     }
 
     const handleInputName = async (event: ChangeEvent<HTMLInputElement>) => {

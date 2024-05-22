@@ -67,11 +67,15 @@ function AgentFormPage() {
         setClear(true);
         console.log('cancel action from app: ' + clear);
     }
-    const handleChanges = async (value: IGData) => {
+    const handleChanges = async (agent: IGData) => {
+        const agentTarget = items.find((agentItem) => agentItem.id === agent.id);
         setOpen(true);
-        // setAgentRegistrationNumber(value.id);
-        setAgentName(value.name);
-        // setAgentCodeAgency(value.code);
+       if (agentTarget){
+           setAgentRegistrationNumber(agentTarget.id.toString());
+           setAgentName(agentTarget.name);
+           setAgentCodeAgency(agentTarget.agencyCode);
+       }
+
     }
 
     const handleInputMatriculate = async (event: ChangeEvent<HTMLInputElement>) => {
