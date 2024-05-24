@@ -53,9 +53,13 @@ function SelectionSection( {fileData}: SelectionSectionProps) {
     }
 
     const handleStatSelection = async (state: IGData) => {
-        setSelectedStatName(state.name);
-        setStatExtension(state.extension);
-        console.log("stat: "+ state.extension);
+        const statTarget = stat.find((statItem) => statItem.id === state.id);
+        if (statTarget){
+            setSelectedStatName(statTarget.name);
+            setStatExtension(statTarget.extension);
+            console.log("stat: "+ statTarget.extension);
+        }
+
     }
 
     const handleStartDateChange = (date: Dayjs | null) => {
@@ -86,11 +90,11 @@ function SelectionSection( {fileData}: SelectionSectionProps) {
     return (
         <>
             <SC.BoxStyle>
-                <DropDownListAutoCommitted items={mapApplicationToIGData(application)} arrName={"application"}
+                <DropDownListAutoCommitted items={mapApplicationToIGData(application)} arrName={"Application"}
                                            handleSelection={handleApplicationSelection} />
-                <DropDownListAutoCommitted items={mapStateToIGData(stat)} arrName={"états"} handleSelection={handleStatSelection}/>
-                <Date setDate={handleStartDateChange} labelName={"Starting date"}/>
-                <Date setDate={handleEndDateChange} labelName={"ending date"}/>
+                <DropDownListAutoCommitted items={mapStateToIGData(stat)} arrName={"Etats"} handleSelection={handleStatSelection}/>
+                <Date setDate={handleStartDateChange} labelName={"Date De Début"}/>
+                <Date setDate={handleEndDateChange} labelName={"Date De Fin"}/>
             </SC.BoxStyle>
             <div style={{textAlign:"center"}}>{folderName}</div>
         </>

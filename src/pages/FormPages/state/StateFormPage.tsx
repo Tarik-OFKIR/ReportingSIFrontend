@@ -1,7 +1,7 @@
 import FormField from "../../../components/Form/FormField.tsx";
 import ButtonUI from "../../../components/buttons/ButtonUI.tsx";
 import MainNavBar from "../../../components/navbar/MainNavBar.tsx";
-import {getData, postData} from "../../../servies/api.ts";
+import {getData, postData, putData} from "../../../servies/api.ts";
 import {ChangeEvent, useEffect, useState} from "react";
 import FormFieldAutoCompleted from "../../../components/Form/FormFieldAutoCompleted.tsx";
 import {State} from "../../../Modules/State.tsx";
@@ -24,7 +24,7 @@ function StateFormPage() {
         const fetchData = async () => {
             try {
                 //TODO: change the url to be dynamic
-                const stateResponse = await getData(token, "/application/474/stats");
+                const stateResponse = await getData(token, "/application/420/stats");
                 setItems(stateResponse);
             } catch (error) {
                 console.error('Error fetching state data', error);
@@ -40,7 +40,7 @@ function StateFormPage() {
                     name: stateName,
                     description: stateDescription,
                     extension: stateExtension,
-                    applicationCode: stateApplicationCode
+                    applicationId: stateApplicationCode
                 });
                 console.log(stateResponse);
             } catch (error) {
@@ -52,11 +52,12 @@ function StateFormPage() {
 
     const onSubmitUpdateItem = async () => {
         try {
-            const stateResponse = await postData(token, `/updateState${stateId}`, {
+            const stateResponse = await putData(token, `/updateState`, {
                 name: stateName,
                 description: stateDescription,
                 extension: stateExtension,
-                applicationCode: stateApplicationCode
+                applicationId: stateApplicationCode,
+                id: stateId
             });
             console.log(stateResponse);
         } catch (error) {
