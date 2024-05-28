@@ -70,6 +70,8 @@ function ResultViewer( {applicationName, statName, extinction, startDate, endDat
             const response = await postDataFile(token, '/download',
                 {
                     extension: extinction,
+                    startDate: startDate,
+                    endDate: endDate,
                 });
             console.log("response: "+response);
             setMessage("Les documents ont été téléchargés avec succès.");
